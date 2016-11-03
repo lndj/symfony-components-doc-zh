@@ -22,3 +22,10 @@
 + **移动静态资源的位置** 非常麻烦并且容易出错，它需要你仔细更新所有模板中包含的所有静态资源的路径。Asset 组件允许仅通过改变与静态资源包相关联的基本路径值来轻松地移动静态资源位置。
 
 + **几乎不可能使用多个CDN** ：这项技术需要你为每个请求随机更改静态资源的地址。Asset 组件对多 CDN 提供开箱即用的支持，包括常规的 `http://` 和安全的 `https://` 。
+
+## 安装
+
+你可以通过一下两种方式进行安装：
++ [通过 Composer 安装](https://github.com/lndj/symfony-components-doc-zh/blob/master/3.1version/%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8Symfony%E7%BB%84%E4%BB%B6.md) (`symfony/asset` on [Packagist](https://packagist.org/packages/symfony/asset))
+
+## 使用
