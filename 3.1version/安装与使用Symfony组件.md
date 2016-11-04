@@ -48,3 +48,6 @@ composer require symfony/symfony
 现在组件已安装并自动加载，请阅读特定组件的文档以了解有关如何使用它的更多信息。
 
 And have fun!
+
+---
+[下一篇：Asset 组件](https://github.com/lndj/symfony-components-doc-zh/blob/master/3.1version/Asset/the-asset-component.md)
