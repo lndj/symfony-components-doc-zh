@@ -5,37 +5,39 @@
 ## 使用 Finder 组件
 
 1. 如果你是创建一个全新的项目，请为它创建一个目录。
+
 2. 打开终端程序，使用 Composer 来安装这个库。
 
-```shell
-composer require symfony/finder
-```
+  ```shell
+  composer require symfony/finder
+  ```
 
-其中 `symfony/finder` 就是你想要安装的组件的名称。
+  其中 `symfony/finder` 就是你想要安装的组件的名称。
 
-> 如果你还没有[安装 Composer ](https://getcomposer.org/download/)，取决于你使用哪种安装方式，你可能需要将 `composer.phar` 文件放置于当前目录中。在这种情况下，不必担心，你只需运行 `php composer.phar require symfony/finder` 命令即可。
+  > 如果你还没有[安装 Composer ](https://getcomposer.org/download/)，取决于你使用哪种安装方式，你可能需要将 `composer.phar` 文件放置于当前目录中。在这种情况下，不必担心，你只需运行 `php composer.phar require symfony/finder` 命令即可。
 
 3. 码起来！
 
-一旦 Composer 下载了组件，您所需要做的就是 `require` 由 Composer 生成的 `vendor/autoload.php` 文件。此文件负责自动加载所有库，以便您可以立即使用它们：
+  一旦 Composer 下载了组件，您所需要做的就是 `require` 由 Composer 生成的 `vendor/autoload.php` 文件。此文件负责自动加载所有库，以便您可以立即使用它们：
 
-```php
-// File example: src/script.php
+  ```php
+  // File example: src/script.php
 
-// 将此处的路径更改为 "vendor/"
-// 目录的相对地址
-require_once __DIR__.'/../vendor/autoload.php';
+  // 将此处的路径更改为 "vendor/"
+  // 目录的相对地址
+  require_once __DIR__.'/../vendor/autoload.php';
 
-use Symfony\Component\Finder\Finder;
+  use Symfony\Component\Finder\Finder;
 
-$finder = new Finder();
-$finder->in('../data/');
+  $finder = new Finder();
+  $finder->in('../data/');
 
-// ...
-```
+  // ...
+  ```
+  
 ## 使用所有组件
 
-如果你想使用所有的 Symfony 组件，那么不要逐个添加它们，你可以安装 `symfony` 包：
+如果你想使用所有的 Symfony 组件，那么不要逐个添加它们，你可以安装 `symfony/symfony` 包：
 
 ```sh
 composer require symfony/symfony
