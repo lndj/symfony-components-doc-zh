@@ -29,3 +29,33 @@
 + [通过 Composer 安装](https://github.com/lndj/symfony-components-doc-zh/blob/master/3.1version/%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8Symfony%E7%BB%84%E4%BB%B6.md) (`symfony/asset` on [Packagist](https://packagist.org/packages/symfony/asset))
 
 ## 使用
+
+### 静态资源包
+
+Asset组件通过包的形式来管理静态资源。包将所有共享相同属性的静态资源分组，例如：版本控制策略，基本路径，CDN 主机等。在以下基本示例中，创建一个包来管理静态资源，而不进行任何版本控制：
+
+```php
+use Symfony\Component\Asset\Package;
+use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
+
+$package = new Package(new EmptyVersionStrategy());
+
+echo $package->getUrl('/image.png');
+// result: /image.png
+```
+
+`Packages` 类实现了 `PackageInterface` 接口，它定义了一下两个方法：
+
+  `getVersion()`
+
+  返回静态资源的版本
+
+  `getUrl()`   
+
+  返回绝对或相对与根公共目录相对的路径。
+
+在使用一个包时，你可以：
+<!-- 此处有锚点 -->
+  1. 静态资源的版本
+  2. 为静态资源设置一个通用的基本路径，（例如 `/css`）
+  3. 为静态资源配置 CDN
