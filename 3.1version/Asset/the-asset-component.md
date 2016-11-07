@@ -27,6 +27,7 @@
 
 你可以通过一下两种方式进行安装：
 + [通过 Composer 安装](https://github.com/lndj/symfony-components-doc-zh/blob/master/3.1version/%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8Symfony%E7%BB%84%E4%BB%B6.md) (`symfony/asset` on [Packagist](https://packagist.org/packages/symfony/asset))
++ 使用官方的Git仓库： [https://github.com/symfony/asset](https://github.com/symfony/asset)
 
 ## 使用
 
@@ -59,3 +60,78 @@ echo $package->getUrl('/image.png');
   1. 静态资源的版本
   2. 为静态资源设置一个通用的基本路径，（例如 `/css`）
   3. 为静态资源配置 CDN
+
+### 静态资源版本控制
+
+Asset 组件一个主要的特性就是管理应用程序静态资源的版本的能力。静态资源的版本通常被用来控制静态资源的缓存方式。
+
+Asset 组件不是依赖于简单的版本机制，而是通过PHP类来定义高级版本控制策略。两个内置的策略分别是 `EmptyVersionStrategy` 和 `StaticVersionStrategy` ，前者不添加任何的版本给静态资源，后者允许你使用格式化的字符串来设置版本。
+
+在下面的例子中，`StaticVersionStrategy` 添加 `v1` 后缀到任意一个静态资源路径上：
+
+```php
+use Symfony\Component\Asset\Package;
+use Symfony\Component\Asset\VersionStrategy\StaticVersionStrategy;
+
+$package = new Package(new StaticVersionStrategy('v1'));
+
+echo $package->getUrl('/image.png');
+// result: /image.png?v1
+```
+
+如果要修改版本格式，请传递一个 `sprintf` 兼容的格式字符串作为 `StaticVersionStrategy` 构造函数的第二个参数：
+
+```php
+// 将 'version' 放置在版本号之前
+$package = new Package(new StaticVersionStrategy('v1', '%s?version=%s'));
+
+echo $package->getUrl('/image.png');
+// result: /image.png?version=v1
+
+// 将版本号置于路径之前
+$package = new Package(new StaticVersionStrategy('v1', '%2$s/%1$s'));
+
+echo $package->getUrl('/image.png');
+// result: /v1/image.png
+```
+
+### 自定义版本策略
+
+使用 `VersionStrategyInterface` 接口来定义你自己的版本策略。例如，您的应用程序可能需要将当前日期追加到其所有网络资源，以便每天破坏缓存：
+
+```php
+use Symfony\Component\Asset\VersionStrategy\VersionStrategyInterface;
+
+class DateVersionStrategy implements VersionStrategyInterface
+{
+    private $version;
+
+    public function __construct()
+    {
+        $this->version = date('Ymd');
+    }
+
+    public function getVersion($path)
+    {
+        return $this->version;
+    }
+
+    public function applyVersion($path)
+    {
+        return sprintf('%s?v=%s', $path, $this->getVersion($path));
+    }
+}
+```
+### 静态资源分组
+
+通常情况下，许多静态资源放置于同一路径下（例如： `/static/images` ），如果是这种情况，请使用 `PathPackage` 替换默认的 `Package` 类，以避免重复该路径：
+
+```php
+use Symfony\Component\Asset\PathPackage;
+// ...
+
+$package = new PathPackage('/static/images', new StaticVersionStrategy('v1'));
+
+echo $package->getUrl('/logo.png');
+// result: /static/images/logo.png?v1
+```
