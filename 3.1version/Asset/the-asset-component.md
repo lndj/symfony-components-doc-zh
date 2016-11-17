@@ -135,3 +135,78 @@ $package = new PathPackage('/static/images', new StaticVersionStrategy('v1'));
 echo $package->getUrl('/logo.png');
 // result: /static/images/logo.png?v1
 ```
+
+### 请求上下文感知静态资源
+
+如果你在你的应用中使用了 [HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html) 组件，`PathPackage` 类可以考虑到本次请求的上下文信息：
+
+```php
+use Symfony\Component\Asset\PathPackage;
+use Symfony\Component\Asset\Context\RequestStackContext;
+// ...
+
+$package = new PathPackage(
+    '/static/images',
+    new StaticVersionStrategy('v1'),
+    new RequestStackContext($requestStack)
+);
+
+echo $package->getUrl('/logo.png');
+// result: /somewhere/static/images/logo.png?v1
+```
+
+现在已有了请求上下文信息，`PathPackage` 将在前面添加当前请求基本 `URL` 。因此，举个例子：如果整个网站托管在Web服务器根目录的 `/somewhere` 目录下，并且配置的基本路径是 `/static/images`，则所有路径都将以 `/somewhere/static/images` 作为前缀。
+
+### 静态资源绝对路径和CDNs
+
+在不同网域和CDN（内容分发网络）上托管其资产的应用程序应使用 `UrlPackage` 类为其静态资源生成绝对地址：
+
+```php
+use Symfony\Component\Asset\UrlPackage;
+// ...
+
+$package = new UrlPackage(
+    'http://static.example.com/images/',
+    new StaticVersionStrategy('v1')
+);
+
+echo $package->getUrl('/logo.png');
+// result: http://static.example.com/images/logo.png?v1
+```
+
+您还可以传递不带有协议的URL：
+
+```php
+use Symfony\Component\Asset\UrlPackage;
+// ...
+
+$package = new UrlPackage(
+    '//static.example.com/images/',
+    new StaticVersionStrategy('v1')
+);
+
+echo $package->getUrl('/logo.png');
+// result: //static.example.com/images/logo.png?v1
+```
+
+这是非常有用的，因为如果访问者以 `https` 方式查看您的网站，则系统会自动通过 `HTTPS` 请求资源。只需确保您的CDN主机支持 `https` 。
+
+如果您从多个域提供静态资源以提高应用程序性能，请将URL数组作为 `UrlPackage` 构造函数的第一个参数传递：
+
+```php
+use Symfony\Component\Asset\UrlPackage;
+// ...
+
+$urls = array(
+    '//static1.example.com/images/',
+    '//static2.example.com/images/',
+);
+$package = new UrlPackage($urls, new StaticVersionStrategy('v1'));
+
+echo $package->getUrl('/logo.png');
+// result: http://static1.example.com/images/logo.png?v1
+echo $package->getUrl('/icon.png');
+// result: http://static2.example.com/images/icon.png?v1
+```
+
+对于每个静态资源，会随机选取一个URL来使用。但是，选择是确定性的，这意味着每个静态资源将始终由相同的域提供。此行为简化了 `HTTP` 缓存的管理。
