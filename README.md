@@ -11,3 +11,5 @@
 + [BrowserKit 组件](https://github.com/lndj/symfony-components-doc-zh/blob/master/3.1version/BrowserKit/the-browserKit-component.md)
 
 + [Cache 组件](https://github.com/lndj/symfony-components-doc-zh/blob/master/3.1version/Cache/the-cache-component.md)
+
++ [Config 组件](https://github.com/lndj/symfony-components-doc-zh/blob/master/3.1version/Config/the-config-component.md)
