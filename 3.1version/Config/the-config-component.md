@@ -12,3 +12,8 @@
 然后，需要 `vendor/autoload.php` 文件来启用 `Composer` 提供的自动加载机制。否则，您的应用程序将无法找到此 `Symfony` 组件的类。
 
 ## 了解更多
+[基于资源的缓存](https://github.com/lndj/symfony-components-doc-zh/blob/master/3.1version/Config/caching-based-on-resources.md)
+[定义和处理配置值](https://github.com/lndj/symfony-components-doc-zh/blob/master/3.1version/Config/defining-and-processing-configuration-values.md)
+[加载资源](https://github.com/lndj/symfony-components-doc-zh/blob/master/3.1version/Config/loading-resources.md)
+
+
